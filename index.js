@@ -39,7 +39,7 @@ flow.on("data", (id, item) => {
         // Format left side
         var width = Math.max(...left.map(value => value.join``.length - 2));
         left.forEach((value, index) => index > 0 && index < 9 && (left[index] = `${left[index][0]}${"═".repeat(width - left[index][1].length)}${left[index].slice(1).join``}`));
-        left[1] = left[1].split``.reverse().join``.replace(/[a-z]+/i, "\x1b[32m$&\x1b[0m");
+        left[1] = left[1].replace("═", "─").split``.reverse().join``.replace(/[a-z]+/i, "\x1b[32m$&\x1b[0m");
         for (var i = 0; i < 5; i++) left[i + 3] = left[i + 3].replace(/\d+/g, "\x1b[33m$&\x1b[0m");
 
         output[9] = graph.status;
@@ -61,8 +61,8 @@ function getInput() {
         } else if (data.startsWith("--graph") || data.startsWith("-g")) {
             const args = data.split(/\s+/g).filter(arg => !arg.startsWith("-"));
             screen.push({
-                name: args.shift(),
-                type: args.shift(),
+                name: args.shift() || "",
+                type: args.shift() || "bar",
                 status: args.shift() || "",
                 data: [...args.map(value => parseInt(value))],
             });
