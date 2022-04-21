@@ -6,14 +6,14 @@ function bar(items, output, left) {
     var range = highest - lowest;
     var row = range / 5;
     items.forEach((value, index) => {
-        var height = Math.floor((value - lowest) / row);
+        var height = (value - lowest) / row;
         for (var i = 0; i < 5; i++) {
             if (i <= height) data[i] += "█";
             else data[i] += "┼";
         }
     });
     data.reverse().map(value => value.length < 40 ? "┼".repeat(40 - value.length) + value : value).forEach((value, index) => {
-        left[index + 3] = ["╞", (Math.round(row) * (data.length - index)).toString(), "╡"];
+        left[index + 3] = ["╞", (Math.round(row) * (data.length - index) + lowest).toString(), "╡"];
         output[index + 3] = value.replace("█", "\x1b[36m█").replace("┼", "\x1b[35m┼") + "\x1b[0m│";
     });
 
