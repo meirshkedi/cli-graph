@@ -34,7 +34,12 @@ flow.on("data", (id, item) => {
             var data = require("./graphs/bar")(graph, output, left);
             output = data.output;
             left = data.left;
-        };
+        } else if (graph.type === "plot") {
+            // Format line graph
+            var data = require("./graphs/line")(graph, output, left);
+            output = data.output;
+            left = data.left;
+        } else console.log("\x1b[31mInvalid graph type\u001b[0m");
 
         // Format left side
         var width = Math.max(...left.map(value => value.join``.length - 2));
