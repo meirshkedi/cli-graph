@@ -1,0 +1,24 @@
+{
+  "name": "cli-graph",
+  "version": "1.0.0",
+  "description": "Graph interface for the commnd line",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aroary/cli-graph.git"
+  },
+  "keywords": [
+    "cli",
+    "graph",
+    "data"
+  ],
+  "author": "aroary",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aroary/cli-graph/issues"
+  },
+  "homepage": "https://github.com/aroary/cli-graph#readme"
+}
