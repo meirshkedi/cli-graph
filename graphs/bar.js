@@ -14,7 +14,7 @@ function bar(items, output, left) {
     });
     data.reverse().map(value => value.length < 40 ? " ".repeat(40 - value.length) + value : value).forEach((value, index) => {
         left[index + 3] = ["╞", (Math.round(row) * (data.length - index)).toString(), "╡"];
-        output[index + 3] = "\x1b[36m" + value + "\u001b[0m║";
+        output[index + 3] = "\x1b[36m" + value + "\u001b[0m│";
     });
 
     return { output, left };

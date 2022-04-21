@@ -20,14 +20,14 @@ flow.on("data", (id, item) => {
         var left = new Array(10).fill([]);
 
         // Initiate left side
-        left[1] = ["╤", "ABCD"[id], "╒"];
-        left[2] = ["╞", "═", "╪"];
+        left[1] = ["─", "ABCD"[id], "┌"];
+        left[2] = ["╞", "═", "╤"];
         left[8] = ["╘", "═", "╧"];
 
         // Format output
-        output[1] += `═\x1b[32m${graph.name}\x1b[0m${"═".repeat(39 - graph.name.length)}╗`;
-        output[2] += "═".repeat(40) + "╣";
-        output[8] += "═".repeat(40) + "╝";
+        output[1] += `─\x1b[32m${graph.name}\x1b[0m─┐`;
+        output[2] += `${"═".repeat(graph.name.length + 2)}╧${"═".repeat(37 - graph.name.length)}╕`;
+        output[8] += "═".repeat(40) + "╛";
 
         if (graph.type === "bar") {
             // Format bar graph
@@ -42,6 +42,8 @@ flow.on("data", (id, item) => {
         left[1] = left[1].split``.reverse().join``.replace(/[a-z]+/i, "\x1b[32m$&\x1b[0m");
         for (var i = 0; i < 5; i++) left[i + 3] = left[i + 3].replace(/\d+/g, "\x1b[33m$&\x1b[0m");
 
+        output[9] = graph.status;
+
         output = output.map((value, index) => left[index] + value);
         console.log(output.join`\n`);
     });
@@ -53,13 +55,16 @@ function getInput() {
 
         // Use arguments
         if (data.includes("--exit") || data.includes("-e")) process.exit();
-        else if (data.includes("--clear") || data.includes("-c")) screen[0].data = [];
-        else if (data.startsWith("--graph") || data.startsWith("-g")) {
+        else if (data.includes("--clear") || data.includes("-c")) {
+            const args = data.split(/\s+/g).filter(arg => !arg.startsWith("-"));
+            screen[parseInt(args.shift())].data = [];
+        } else if (data.startsWith("--graph") || data.startsWith("-g")) {
             const args = data.split(/\s+/g).filter(arg => !arg.startsWith("-"));
             screen.push({
                 name: args.shift(),
                 type: args.shift(),
-                data: [...args.map(value => parseInt(value))]
+                status: args.shift() || "",
+                data: [...args.map(value => parseInt(value))],
             });
         } else flow.emit("data", ...data.split(/\s+/).map(value => parseFloat(value)));
 
