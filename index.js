@@ -49,28 +49,29 @@ flow.on("data", (id, item) => {
     });
 });
 
+function processData(data) {
+    console.clear();
+
+    // Use arguments
+    if (!data || data.includes("--exit") || data.includes("-e")) process.exit();
+    else if (data.includes("--clear") || data.includes("-c")) {
+        const args = data.split(/\s+/g).filter(arg => !arg.startsWith("-"));
+        const item = args.shift();
+        if (item) screen[parseInt(args.shift())].data = [];
+    } else if (data.startsWith("--graph") || data.startsWith("-g")) {
+        const args = data.split(/\s+/g).filter(arg => !arg.startsWith("-"));
+        screen.push({
+            name: args.shift() || "UNTITLED",
+            type: args.shift() || "bar",
+            status: args.join` `,
+            data: [],
+        });
+    } else flow.emit("data", ...data?.split(/\s+/).map(value => parseFloat(value)));
+}
+
 function getInput() {
     line.question("", data => {
-        if (!data) return getInput();
-
-        console.clear();
-
-        // Use arguments
-        if (data.includes("--exit") || data.includes("-e")) process.exit();
-        else if (data.includes("--clear") || data.includes("-c")) {
-            const args = data.split(/\s+/g).filter(arg => !arg.startsWith("-"));
-            const item = args.shift();
-            if (!item) return getInput();
-            screen[parseInt(args.shift())].data = [];
-        } else if (data.startsWith("--graph") || data.startsWith("-g")) {
-            const args = data.split(/\s+/g).filter(arg => !arg.startsWith("-"));
-            screen.push({
-                name: args.shift() || "UNTITLED",
-                type: args.shift() || "bar",
-                status: args.shift() || "",
-                data: [...args.map(value => parseInt(value))],
-            });
-        } else flow.emit("data", ...data?.split(/\s+/).map(value => parseFloat(value)));
+        processData(data);
 
         // Continue to get input
         getInput();
@@ -79,4 +80,7 @@ function getInput() {
 
 // Start
 console.clear();
-getInput();
+
+if (process.argv.includes("--module") || process.argv.includes("-m")) {
+    module.exports = processData;
+} else getInput();

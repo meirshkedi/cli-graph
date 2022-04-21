@@ -4,7 +4,9 @@
   "description": "Graph interface for the commnd line",
   "main": "index.js",
   "scripts": {
-    "test": "node index.js"
+    "test": "node index.js",
+    "tests/cpu": "node tests/cpu.js -m",
+    "tests/memory": "node tests/memory.js -m"
   },
   "repository": {
     "type": "git",
