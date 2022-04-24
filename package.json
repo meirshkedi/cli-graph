@@ -5,7 +5,7 @@
   "main": "module.js",
   "scripts": {
     "test": "node index.js",
-    "tests/memory": "node tests/memory.js -m"
+    "tests/memory": "node tests/test.js memory"
   },
   "repository": {
     "type": "git",
