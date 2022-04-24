@@ -5,7 +5,6 @@
   "main": "module.js",
   "scripts": {
     "test": "node index.js",
-    "tests/cpu": "node tests/cpu.js -m",
     "tests/memory": "node tests/memory.js -m"
   },
   "repository": {
