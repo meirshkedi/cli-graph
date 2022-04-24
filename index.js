@@ -80,7 +80,7 @@ function processCommand(...command) {
 
                 // Set context
                 context = screen.length - 1;
-            } else if (item.flag === "context") context = parseInt(context);
+            } else if (item.flag === "context") context = parseInt(item.args[0]);
             else if (item.flag === "clear") screen[context].data = [];
             else if (item.flag === "width") screen[context].width = parseInt(item.args[0]);
             else if (item.flag === "height") screen[context].height = parseInt(item.args[0]);
