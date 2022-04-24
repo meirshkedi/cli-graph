@@ -27,7 +27,7 @@ flow.on("data", (id, item) => {
         // Format output
         output[0] += `─\x1b[32m${graph.name}\x1b[0m─┐`;
         output[1] += `${"═".repeat(graph.name.length + 2)}╧${"═".repeat(graph.width - 3 - graph.name.length)}╕`;
-        output[graph.height + 2] += "═".repeat(graph.width) + "╛";
+        output[graph.height + 2] += `\x1b[33m${graph.width}\x1b[0m${"═".repeat(graph.width - graph.width.toString().length - 1)}\x1b[33m0\x1b[0m╛`;
 
         if (graph.type === "bar") {
             // Format bar graph
@@ -107,6 +107,5 @@ function getInput() {
 // Start
 console.clear();
 
-if (process.argv.includes("--module") || process.argv.includes("-m")) {
-    module.exports = processCommand;
-} else getInput();
+module.exports = processCommand;
+getInput();
