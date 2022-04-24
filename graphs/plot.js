@@ -8,7 +8,7 @@ function plot(graph, output, left) {
 
     graph.data.forEach(value => {
         var height = (value - lowest) / row;
-        var location = 0;
+        var location = -1;
         for (var i = 0; i < graph.height; i++) if (i <= height) location++;
         for (var i = 0; i < graph.height; i++) if (i === location) data[i] += "■";
         else data[i] += "┼";
