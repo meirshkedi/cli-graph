@@ -13,7 +13,7 @@ function bar(graph, output, left) {
     });
 
     data.reverse().map(value => value.length < graph.width ? "┼".repeat(graph.width - value.length) + value : value).forEach((value, index) => {
-        left[index + 2] = ["╞", (Math.round(row) * (data.length - index) + lowest).toString(), "╡"];
+        left[index + 2] = ["╞", (Math.round(row) * (data.length - index)).toString(), "╡"];
         output[index + 2] = value.replace(/█+/g, "\x1b[36m$&").replace(/┼+/g, "\x1b[35m$&") + "\x1b[0m│";
     });
 
