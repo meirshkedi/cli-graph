@@ -55,7 +55,7 @@ class Graph {
      * @returns {Graph} This graph.
      */
     setHeight(height) {
-        screen.processCommand(`--context ${this.id} --width ${height}`);
+        screen.processCommand(`--context ${this.id} --height ${height}`);
         return this;
     };
 
@@ -75,6 +75,55 @@ class Command {
         this.data = [];
     };
 
+    /**
+     * @description Send data to the graph and update the visualization.
+     * @returns {string} This command.
+     */
+    send() {
+        var data = this.data.join` `;
+        this.data = [];
+        screen.processCommand(data);
+        return data;
+    };
+
+    /**
+     * @description Clear the graph of its previous data.
+     * @returns {Graph} This graph.
+     */
+    clear() {
+        this.data.push("--clear");
+        return this;
+    };
+
+    /**
+     * @description Set the width of the graph
+     * @param {number} width - The width.
+     * @returns {Graph} This graph.
+     */
+    setWidth(width) {
+        this.data.push("--width", width);
+        return this;
+    };
+
+    /**
+     * @description Set the height of the graph
+     * @param {number} height - The height.
+     * @returns {Graph} This graph.
+     */
+    setHeight(height) {
+        this.data.push("--height", height);
+        return this;
+    };
+
+    /**
+     * @description Set the status message of the graph.
+     * @param {string} status - The status.
+     * @returns {Graph} This graph.
+     */
+    setStatus(status) {
+        this.data.push("--status", status);
+        return this;
+    };
 };
 
 module.exports = { Graph, Command };
