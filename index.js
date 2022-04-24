@@ -7,7 +7,7 @@ const screen = [];
 
 const flow = new event.EventEmitter();
 
-flow.on("data", (id, item) => {
+flow.on("update", (id, item) => {
     if (id > screen.length - 1) return console.log("\x1b[31mInvalid ID\u001b[0m");
     screen[id].data.push(item);
 
@@ -54,41 +54,39 @@ flow.on("data", (id, item) => {
     });
 });
 
+
+var context;
 /**
  * @description Processes a command
  * @param  {...string} command - Command to process
  */
 function processCommand(...command) {
     command.forEach(data => {
-        console.clear();
+        data = data.split(/\s+/g);
+        const commands = [];
+        data.forEach(item => item.startsWith("--") ? commands.push({ flag: item.slice(2), args: [] }) : commands[commands.length - 1].args.push(item));
 
-        // Use arguments
-        if (!data || data.includes("--exit") || data.includes("-e")) process.exit();
-        else if (data.includes("--clear") || data.includes("-c")) {
-            const args = data.split(/\s+/g).filter(arg => !arg.startsWith("-"));
-            const item = args.shift();
-            if (item) screen[item].data = [];
-        } else if (data.includes("--width") || data.includes("-w")) {
-            const args = data.split(/\s+/g).filter(arg => !arg.startsWith("-"));
-            const item = args.shift();
-            const width = parseInt(args.shift());
-            if (item && width) screen[item].width = width;
-        } else if (data.includes("--height") || data.includes("-h")) {
-            const args = data.split(/\s+/g).filter(arg => !arg.startsWith("-"));
-            const item = args.shift();
-            const height = parseInt(args.shift());
-            if (item && height) screen[item].height = height;
-        } else if (data.startsWith("--graph") || data.startsWith("-g")) {
-            const args = data.split(/\s+/g).filter(arg => !arg.startsWith("-"));
-            screen.push({
-                name: args.shift() || "UNTITLED",
-                type: args.shift() || "bar",
-                status: args.join` `,
-                width: 40,
-                height: 5,
-                data: [],
-            });
-        } else flow.emit("data", ...data?.split(/\s+/).map(value => parseFloat(value)));
+        commands.forEach(item => {
+            if (item.flag === "exit") process.exit();
+            else if (item.flag === "graph") {
+                screen.push({
+                    name: item.args[0],
+                    type: item.args[1],
+                    width: 60,
+                    height: 20,
+                    status: "",
+                    data: []
+                });
+
+                // Set context
+                context = screen.length - 1;
+            } else if (item.flag === "context") context = parseInt(context);
+            else if (item.flag === "clear") screen[context].data = [];
+            else if (item.flag === "width") screen[context].width = parseInt(item.args[0]);
+            else if (item.flag === "height") screen[context].height = parseInt(item.args[0]);
+            else if (item.flag === "status") screen[context].status = item.args.join` `;
+            else if (item.flag === "data") flow.emit("update", context, item.args[0]);
+        });
     });
 };
 
@@ -107,5 +105,5 @@ function getInput() {
 // Start
 console.clear();
 
-module.exports = processCommand;
+module.exports = { context, processCommand };
 getInput();

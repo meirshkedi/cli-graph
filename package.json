@@ -2,7 +2,7 @@
   "name": "cli-graph",
   "version": "1.0.0",
   "description": "Graph interface for the commnd line",
-  "main": "index.js",
+  "main": "module.js",
   "scripts": {
     "test": "node index.js",
     "tests/cpu": "node tests/cpu.js -m",
